@@ -1,0 +1,551 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    background: #1a1816;
+    font-family: 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #f0ebe3;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#game-container {
+    position: relative;
+    width: 960px;
+    height: 600px;
+    background: #2d2a26;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                0 0 80px rgba(212, 165, 116, 0.15);
+}
+
+#game-canvas {
+    display: block;
+    background: #1a1816;
+    cursor: crosshair;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* HUD */
+#hud {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 10;
+    font-size: 14px;
+}
+
+#hp-bar {
+    position: relative;
+    width: 220px;
+    height: 22px;
+    background: rgba(20, 18, 16, 0.8);
+    border: 1px solid #d4a574;
+    border-radius: 11px;
+    overflow: hidden;
+}
+
+#hp-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #d4a574, #e8c098);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(232, 192, 152, 0.5);
+}
+
+#hp-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1816;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+#stats {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: rgba(20, 18, 16, 0.7);
+    padding: 6px 14px;
+    border-radius: 11px;
+    border: 1px solid #d4a574;
+}
+
+.stat-item {
+    font-size: 13px;
+    color: #e8c098;
+}
+
+/* 小地图 */
+#minimap {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 140px;
+    height: 100px;
+    background: rgba(20, 18, 16, 0.85);
+    border: 1px solid #d4a574;
+    border-radius: 8px;
+    padding: 6px;
+    z-index: 10;
+    font-size: 11px;
+    color: #a8a29a;
+}
+
+/* 覆盖层 */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 18, 16, 0.85);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    animation: fadeIn 0.3s ease;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.menu-panel {
+    background: #2d2a26;
+    border: 1px solid #d4a574;
+    border-radius: 16px;
+    padding: 40px 50px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5),
+                0 0 60px rgba(212, 165, 116, 0.2);
+    min-width: 380px;
+    max-width: 90%;
+}
+
+.menu-panel h1 {
+    font-size: 2.2rem;
+    color: #e8c098;
+    margin-bottom: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.menu-panel h2 {
+    font-size: 1.6rem;
+    color: #e8c098;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+.menu-subtitle {
+    color: #a8a29a;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.menu-panel p {
+    color: #d4c8b8;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.menu-panel button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #d4a574, #e8c098);
+    color: #1a1816;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    letter-spacing: 1px;
+}
+
+.menu-panel button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 20px rgba(212, 165, 116, 0.4);
+}
+
+.menu-panel button.hidden {
+    display: none;
+}
+
+.menu-tips {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #5a5045;
+    font-size: 12px;
+    color: #8b8680;
+    line-height: 1.8;
+}
+
+.reward-choices {
+    display: flex;
+    gap: 14px;
+    margin: 20px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.reward-card {
+    background: #1a1816;
+    border: 1px solid #d4a574;
+    border-radius: 10px;
+    padding: 20px 16px;
+    min-width: 140px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #e8c098;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.reward-card:hover {
+    background: #3a342c;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(212, 165, 116, 0.3);
+}
+
+.reward-card .reward-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.reward-card .reward-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #d4a574;
+}
+
+.reward-card .reward-desc {
+    color: #a8a29a;
+    font-size: 12px;
+}
+
+.reward-card .reward-rarity {
+    margin-top: 10px;
+    font-size: 10px;
+    color: #d4a574;
+    opacity: 0.8;
+    letter-spacing: 1px;
+}
+
+.reward-card.rare {
+    border-color: #6bb3d9;
+    box-shadow: 0 0 20px rgba(107, 179, 217, 0.3);
+}
+.reward-card.rare .reward-name {
+    color: #6bb3d9;
+}
+.reward-card.rare .reward-rarity {
+    color: #6bb3d9;
+}
+
+.reward-card.legendary {
+    border-color: #a855f7;
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.4);
+    background: linear-gradient(135deg, #1a1816 0%, #2d1f3d 100%);
+}
+.reward-card.legendary .reward-name {
+    color: #c084fc;
+}
+.reward-card.legendary .reward-rarity {
+    color: #c084fc;
+}
+
+.reward-card.rare:hover {
+    box-shadow: 0 6px 24px rgba(107, 179, 217, 0.5);
+}
+.reward-card.legendary:hover {
+    box-shadow: 0 6px 28px rgba(168, 85, 247, 0.6);
+    background: linear-gradient(135deg, #2d2438 0%, #3d2a4d 100%);
+}
+
+#btn-skip-reward {
+    border: 1px solid #5a5045;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    letter-spacing: 1px;
+}
+
+#btn-skip-reward:hover {
+    background: #5a5045;
+    color: #d4c8b8;
+}
+
+/* 消息日志 */
+#message-log {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.log-message {
+    background: rgba(20, 18, 16, 0.9);
+    border-left: 3px solid #d4a574;
+    color: #e8c098;
+    padding: 8px 14px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    animation: logSlideIn 0.3s ease, logFadeOut 0.5s ease 2.5s forwards;
+}
+
+@keyframes logSlideIn {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes logFadeOut {
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* ============ Wiki 百科面板 ============ */
+.wiki-panel {
+    background: #1a1714;
+    border: 2px solid #5a4a3a;
+    border-radius: 10px;
+    padding: 0;
+    width: 780px;
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    color: #e8c098;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+}
+
+.wiki-header {
+    padding: 16px 22px;
+    border-bottom: 2px solid #3a3028;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wiki-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #ffd700;
+    letter-spacing: 2px;
+}
+
+#wiki-close {
+    background: transparent;
+    border: 1px solid #5a4a3a;
+    color: #e8c098;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+#wiki-close:hover {
+    background: #5a4a3a;
+    color: #fff;
+}
+
+.wiki-tabs {
+    display: flex;
+    border-bottom: 2px solid #3a3028;
+    background: #14110e;
+}
+
+.wiki-tab {
+    flex: 1;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    color: #8a7a68;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.2s;
+    letter-spacing: 2px;
+}
+
+.wiki-tab:hover {
+    background: #2a2318;
+    color: #e8c098;
+}
+
+.wiki-tab.active {
+    background: #3a3028;
+    color: #ffd700;
+}
+
+.wiki-content {
+    padding: 16px 22px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 400px;
+    max-height: 60vh;
+}
+
+.wiki-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.wiki-content::-webkit-scrollbar-track {
+    background: #1a1714;
+}
+
+.wiki-content::-webkit-scrollbar-thumb {
+    background: #5a4a3a;
+    border-radius: 4px;
+}
+
+.wiki-section-title {
+    color: #ffd700;
+    font-size: 14px;
+    margin: 14px 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #3a3028;
+    letter-spacing: 1px;
+}
+
+.wiki-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+}
+
+.wiki-card {
+    background: #231d17;
+    border: 1px solid #3a3028;
+    border-radius: 6px;
+    padding: 10px 12px;
+    transition: all 0.2s;
+}
+
+.wiki-card:hover {
+    background: #2a2318;
+    border-color: #5a4a3a;
+}
+
+.wiki-card .wc-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.wiki-card .wc-icon {
+    font-size: 18px;
+}
+
+.wiki-card .wc-name {
+    color: #e8c098;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.wiki-card .wc-desc {
+    color: #a89880;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.wiki-card .wc-stats {
+    color: #789878;
+    font-size: 11px;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+}
+
+.wiki-card .wc-color-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+    box-shadow: 0 0 6px currentColor;
+}
+
+.wiki-card.rare {
+    border-color: #4a7c9a;
+}
+
+.wiki-card.rare .wc-name {
+    color: #8fd3ff;
+}
+
+.wiki-card.legendary {
+    border-color: #c89d4a;
+    background: linear-gradient(135deg, #231d17 0%, #332818 100%);
+}
+
+.wiki-card.legendary .wc-name {
+    color: #ffd700;
+}
+
+.wiki-card.owned {
+    border-color: #7fd47f;
+    background: linear-gradient(135deg, #1a2a1a 0%, #23351d 100%);
+}
+
+.wiki-card.owned .wc-name::after {
+    content: " ✓";
+    color: #7fd47f;
+    font-size: 12px;
+}
+
+.wiki-footer {
+    padding: 10px 22px;
+    border-top: 2px solid #3a3028;
+    text-align: center;
+    color: #8a7a68;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 1000px) {
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+    }
+    #game-canvas {
+        width: 100%;
+        height: 100%;
+    }
+}

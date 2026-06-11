@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微光探索者</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas" width="960" height="600"></canvas>
+        <div id="hud">
+            <div id="hp-bar">
+                <div id="hp-fill"></div>
+                <span id="hp-text">100 / 100</span>
+            </div>
+            <div id="stats">
+                <span class="stat-item">💰 <span id="gold">0</span></span>
+                <span class="stat-item">🏠 第 <span id="floor">1</span> 层</span>
+                <span class="stat-item">📍 <span id="room-info">起始房间</span></span>
+            </div>
+        </div>
+        <div id="minimap"></div>
+        <div id="menu-overlay" class="overlay hidden">
+            <div class="menu-panel">
+                <h1 id="menu-title">微光探索者</h1>
+                <p class="menu-subtitle">在随机生成的迷宫中，做一团温暖的光</p>
+                <button id="btn-start">开始冒险</button>
+                <button id="btn-resume" class="hidden">继续游戏</button>
+                <div class="menu-tips">
+                    <p>⌨️ WASD 移动　🖱️ 鼠标点击或空格射击　⎋ ESC 暂停</p>
+                </div>
+            </div>
+        </div>
+        <div id="pause-overlay" class="overlay hidden">
+            <div class="menu-panel">
+                <h2>暂停中</h2>
+                <button id="btn-continue">继续</button>
+                <button id="btn-quit">返回主菜单</button>
+            </div>
+        </div>
+        <div id="gameover-overlay" class="overlay hidden">
+            <div class="menu-panel">
+                <h2>你的光芒熄灭了...</h2>
+                <p>抵达第 <span id="final-floor">1</span> 层 · 获得 💰 <span id="final-gold">0</span></p>
+                <button id="btn-retry">再次出发</button>
+                <button id="btn-to-menu">返回主菜单</button>
+            </div>
+        </div>
+        <div id="reward-overlay" class="overlay hidden">
+            <div class="menu-panel" style="min-width:520px">
+                <h2 id="reward-title">房间清理完成！选择一个奖励：</h2>
+                <div id="reward-choices" class="reward-choices"></div>
+                <button id="btn-skip-reward" style="margin-top:14px;padding:8px 20px;font-size:13px;background:#3a342c;color:#a8a29a">放弃（恢复 2 生命）</button>
+            </div>
+        </div>
+        <div id="message-log"></div>
+        <div id="wiki-overlay" class="overlay hidden">
+            <div class="wiki-panel">
+                <div class="wiki-header">
+                    <h2>📖 游戏百科</h2>
+                    <button id="wiki-close">✕</button>
+                </div>
+                <div class="wiki-tabs">
+                    <button class="wiki-tab active" data-tab="items">道具</button>
+                    <button class="wiki-tab" data-tab="enemies">小怪</button>
+                    <button class="wiki-tab" data-tab="bosses">Boss</button>
+                </div>
+                <div class="wiki-content" id="wiki-content"></div>
+                <div class="wiki-footer">按 <b>Tab</b> 或 <b>B</b> 打开/关闭</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/bullet.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/item.js"></script>
+    <script src="js/room.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
