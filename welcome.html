@@ -344,6 +344,33 @@
         .game2048-tile { position: absolute; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.8rem; transition: all 0.15s ease; }
         .game2048-instructions { text-align: center; margin-top: 16px; color: var(--muted); font-size: 0.9rem; }
 
+        /* 打地鼠游戏样式 */
+        .whack-content { max-width: 420px !important; padding: 24px; }
+        .whack-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .whack-score-box { background: #8b4513; padding: 8px 20px; border-radius: 8px; text-align: center; }
+        .whack-score-label { font-size: 0.85rem; color: #f5deb3; font-weight: 600; }
+        .whack-score { font-size: 1.6rem; font-weight: 700; color: white; }
+        .whack-timer-box { background: #5a3d2b; padding: 8px 20px; border-radius: 8px; text-align: center; }
+        .whack-new-btn { background: #8b4513; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+        .whack-new-btn:hover { background: #a0522d; }
+        .whack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: #8b6f47; padding: 16px; border-radius: 8px; }
+        .whack-hole { aspect-ratio: 1; background: #3d2817; border-radius: 50%; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .whack-mole { font-size: 2.5rem; user-select: none; transition: transform 0.15s ease; position: absolute; bottom: -100%; }
+        .whack-mole.active { bottom: 0; }
+        .whack-instructions { text-align: center; margin-top: 16px; color: var(--muted); font-size: 0.9rem; }
+
+        /* 贪吃蛇游戏样式 */
+        .snake-content { max-width: 420px !important; padding: 24px; }
+        .snake-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .snake-score-box { background: #2d5a3d; padding: 8px 20px; border-radius: 8px; }
+        .snake-score-label { font-size: 0.85rem; color: #a8d5a8; font-weight: 600; }
+        .snake-score { font-size: 1.6rem; font-weight: 700; color: white; }
+        .snake-new-btn { background: #2d5a3d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+        .snake-new-btn:hover { background: #3d7a4d; }
+        .snake-container { position: relative; background: #1a2e1a; border-radius: 8px; padding: 10px; }
+        .snake-canvas { display: block; margin: 0 auto; background: #1a2e1a; border-radius: 6px; }
+        .snake-instructions { text-align: center; margin-top: 16px; color: var(--muted); font-size: 0.9rem; }
+
         /* 2048方块颜色 */
         .tile-2 { background: #eee4da; color: #776e65; }
         .tile-4 { background: #ede0c8; color: #776e65; }
@@ -448,6 +475,22 @@
             <div class="drawer-item" data-panel="game2048">
                 <span class="drawer-item-icon">🎮</span>
                 <span class="drawer-item-text">2048</span>
+            </div>
+            <div class="drawer-item" data-panel="whack">
+                <span class="drawer-item-icon">🔨</span>
+                <span class="drawer-item-text">打地鼠</span>
+            </div>
+            <div class="drawer-item" data-panel="snake">
+                <span class="drawer-item-icon">🐍</span>
+                <span class="drawer-item-text">贪吃蛇</span>
+            </div>
+            <div class="drawer-item drawer-external" data-url="game/index.html">
+                <span class="drawer-item-icon">✨</span>
+                <span class="drawer-item-text">微光探索者</span>
+            </div>
+            <div class="drawer-item drawer-external" data-url="https://eryuanka.github.io">
+                <span class="drawer-item-icon">🔗</span>
+                <span class="drawer-item-text">EryuanK</span>
             </div>
         </div>
 
@@ -560,6 +603,56 @@
                         <div class="game2048-tile-container" id="game2048TileContainer"></div>
                     </div>
                     <div class="game2048-instructions">使用方向键或滑动来移动方块</div>
+                </div>
+            </div>
+
+            <!-- 打地鼠游戏面板 -->
+            <div class="panel-overlay" id="whackPanel">
+                <div class="panel-content whack-content">
+                    <button class="panel-close" data-close>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="panel-header">🔨 打地鼠</div>
+                    <div class="whack-header">
+                        <div class="whack-score-box">
+                            <div class="whack-score-label">分数</div>
+                            <div class="whack-score" id="whackScore">0</div>
+                        </div>
+                        <div class="whack-timer-box">
+                            <div class="whack-score-label">时间</div>
+                            <div class="whack-score" id="whackTimer">30</div>
+                        </div>
+                        <button class="whack-new-btn" id="whackNewBtn">重新开始</button>
+                    </div>
+                    <div class="whack-grid" id="whackGrid"></div>
+                    <div class="whack-instructions">点击出现的地鼠来得分！</div>
+                </div>
+            </div>
+
+            <!-- 贪吃蛇游戏面板 -->
+            <div class="panel-overlay" id="snakePanel">
+                <div class="panel-content snake-content">
+                    <button class="panel-close" data-close>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <div class="panel-header">🐍 贪吃蛇</div>
+                    <div class="snake-header">
+                        <div class="snake-score-box">
+                            <div class="snake-score-label">分数</div>
+                            <div class="snake-score" id="snakeScore">0</div>
+                        </div>
+                        <button class="snake-new-btn" id="snakeNewBtn">重新开始</button>
+                    </div>
+                    <div class="snake-container">
+                        <canvas class="snake-canvas" id="snakeCanvas" width="360" height="360"></canvas>
+                    </div>
+                    <div class="snake-instructions">使用方向键或 WASD 控制蛇的移动</div>
                 </div>
             </div>
         </div>
@@ -1078,8 +1171,17 @@
             gsap.to(elements.drawerMenu, { x: -280, duration: 0.35, ease: 'power3.in' });
         }
 
+        function openExternal(url) {
+            closeDrawer();
+            const tl = gsap.timeline();
+            tl.to('.page-home', { opacity: 0, scale: 0.95, duration: 0.4, ease: 'power2.in' });
+            tl.to('body', { backgroundColor: '#fdfcfa', duration: 0.3 }, '-=0.2');
+            tl.call(() => { window.location.href = url; });
+        }
+
         function openPanel(panelName) {
             closeDrawer();
+            closePanel();
             setTimeout(() => {
                 const panel = document.getElementById(panelName + 'Panel');
                 if (panel) {
@@ -1116,7 +1218,11 @@
             elements.drawerTrigger.addEventListener('click', () => isDrawerOpen ? closeDrawer() : openDrawer());
             elements.drawerOverlay.addEventListener('click', closeDrawer);
             elements.drawerItems.forEach(item => {
-                item.addEventListener('click', () => openPanel(item.getAttribute('data-panel')));
+                if (item.classList.contains('drawer-external')) {
+                    item.addEventListener('click', () => openExternal(item.getAttribute('data-url')));
+                } else {
+                    item.addEventListener('click', () => openPanel(item.getAttribute('data-panel')));
+                }
             });
 
             // 面板
