@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心诉哇的小窝 - 欢迎</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #fdfcfa;
+            --text: #2d2a26;
+            --muted: #8b8680;
+            --accent: #d4a574;
+            --warm: #e8c098;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1a1816;
+                --text: #f0ebe3;
+                --muted: #a8a29a;
+                --accent: #d4a574;
+                --warm: #c4956a;
+            }
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 欢迎页 */
+        .page-welcome {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg);
+        }
+
+        .avatar-container {
+            position: relative;
+            z-index: 101;
+        }
+
+        .avatar-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--warm) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.3;
+            animation: glowPulse 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.5; }
+        }
+
+        .avatar-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            border: 1px solid var(--warm);
+            transform: translate(-50%, -50%);
+            animation: ringFloat 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .avatar-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+        .avatar-ring:nth-child(2) { width: 240px; height: 240px; animation-delay: 1s; opacity: 0.5; }
+        .avatar-ring:nth-child(3) { width: 280px; height: 280px; animation-delay: 2s; opacity: 0.3; }
+
+        @keyframes ringFloat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.5; }
+        }
+
+        .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 3px solid var(--warm);
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+        }
+
+        .floating-decor {
+            position: absolute;
+            opacity: 0.4;
+            animation: floatDecor 6s ease-in-out infinite;
+            z-index: 99;
+        }
+
+        .floating-decor.star { width: 20px; height: 20px; }
+        .floating-decor.heart { width: 18px; height: 18px; }
+        .floating-decor:nth-child(1) { top: 15%; left: 20%; animation-delay: 0s; }
+        .floating-decor:nth-child(2) { top: 25%; right: 25%; animation-delay: 1s; }
+        .floating-decor:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
+        .floating-decor:nth-child(4) { bottom: 20%; right: 20%; animation-delay: 3s; }
+        .floating-decor:nth-child(5) { top: 40%; left: 10%; animation-delay: 4s; }
+        .floating-decor:nth-child(6) { top: 60%; right: 12%; animation-delay: 5s; }
+
+        @keyframes floatDecor {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+            50% { transform: translateY(-15px) rotate(10deg); opacity: 0.6; }
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--warm);
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .welcome-name {
+            margin-top: 24px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            z-index: 101;
+        }
+
+        /* 跳转按钮（用于 Barba.js 触发） */
+        .goto-home {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 32px;
+            background: linear-gradient(135deg, var(--accent), var(--warm));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 102;
+            box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .goto-home:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.5);
+        }
+
+        @media (max-width: 640px) { .name { font-size: 2.2rem; } }
+    </style>
+</head>
+<body data-barba="wrapper">
+    <!-- 过渡动画层 -->
+    <div class="page-transition-overlay" id="transitionOverlay" data-barba="overlay">
+        <div class="page-transition-glow" id="transitionGlow"></div>
+    </div>
+
+    <div class="page-welcome" data-barba="page">
+        <!-- 漂浮装饰 -->
+        <svg class="floating-decor star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/>
+        </svg>
+        <svg class="floating-decor heart" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        <svg class="floating-decor star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/>
+        </svg>
+        <svg class="floating-decor heart" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        <svg class="floating-decor star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"/>
+        </svg>
+        <svg class="floating-decor heart" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+        
+        <div class="avatar-container" id="avatarContainer">
+            <div class="avatar-ring"></div>
+            <div class="avatar-ring"></div>
+            <div class="avatar-ring"></div>
+            <div class="avatar-glow"></div>
+            <img class="avatar" id="avatar" src="avatar.png" alt="头像">
+        </div>
+        <div class="welcome-name" id="welcomeName">心诉哇的小窝</div>
+        
+        <button class="goto-home" id="gotoHome">进入小窝 →</button>
+    </div>
+
+    <!-- 过渡动画样式 -->
+    <style>
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .page-transition-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--warm) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+
+    <!-- Barba.js 和 GSAP -->
+    <script src="https://unpkg.com/@barba/core@2.9.7/dist/barba.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <script>
+        /**
+         * 心诉哇的小窝 - 欢迎页
+         */
+        const elements = {
+            avatarContainer: document.getElementById('avatarContainer'),
+            avatar: document.getElementById('avatar'),
+            welcomeName: document.getElementById('welcomeName'),
+            gotoHome: document.getElementById('gotoHome'),
+            transitionOverlay: document.getElementById('transitionOverlay'),
+            transitionGlow: document.getElementById('transitionGlow')
+        };
+
+        // 水波纹效果
+        function createRipple(container) {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            container.appendChild(ripple);
+            gsap.fromTo(ripple, 
+                { width: 10, height: 10, opacity: 0.8, top: '50%', left: '50%', xPercent: -50, yPercent: -50 },
+                { width: 300, height: 300, opacity: 0, duration: 1, ease: 'power2.out', onComplete: () => ripple.remove() }
+            );
+        }
+
+        // 跳转主页
+        function goToHome() {
+            const tl = gsap.timeline();
+            
+            tl.to('.floating-decor', { opacity: 0, scale: 0.5, duration: 0.2, stagger: 0.03 });
+            tl.to(elements.avatarContainer, { scale: 0.5, opacity: 0, duration: 0.3 }, '-=0.1');
+            tl.to(elements.welcomeName, { y: -20, opacity: 0, duration: 0.25 }, '-=0.2');
+            tl.to(elements.gotoHome, { opacity: 0, scale: 0.8, duration: 0.2 }, '-=0.3');
+            tl.to(elements.transitionGlow, { width: 2000, height: 2000, opacity: 0.8, duration: 0.4, ease: 'power2.out' });
+            tl.to(elements.transitionOverlay, { opacity: 1, duration: 0.3, ease: 'power2.inOut' });
+            tl.call(() => { window.location.href = 'welcome.html'; });
+        }
+
+        // 事件监听
+        elements.gotoHome.addEventListener('click', goToHome);
+
+        // 入场动画
+        function initAnimation() {
+            gsap.fromTo(elements.avatarContainer, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.5)' });
+            gsap.fromTo(elements.welcomeName, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, delay: 0.2 });
+            gsap.fromTo('.floating-decor', { y: 30, opacity: 0 }, { y: 0, opacity: 0.4, duration: 0.8, stagger: 0.1, delay: 0.3 });
+            gsap.fromTo(elements.gotoHome, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, delay: 0.6 });
+        }
+
+        initAnimation();
+    </script>
+</body>
+</html>
